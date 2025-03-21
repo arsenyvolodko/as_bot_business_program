@@ -67,9 +67,9 @@ async def process_callback_button1(message: Message, state: FSMContext = None):
 
     await state.set_state(service.state.value)
     message = await message.answer(
-        f'Ваше обращение будет направлено в сервис "{service.service_name.value}".\n'
-        'Отправьте сообщение с текстом обращения, Не забудьте указать всю необходимую информацию для представителей сервиса.\n'
-        "После отправки сообщения обращение будет автоматически направлено в выбранный сервис.",
+        f'Ваше обращение будет направлено в отдел "{service.service_name.value}".\n'
+        'Отправьте сообщение с текстом обращения, Не забудьте указать всю необходимую информацию для представителей отдела.\n'
+        "После отправки сообщения обращение будет автоматически направлено в выбранный отдел.",
         reply_markup=get_cancel_keyboard(),
     )
     await state.set_data({"message": message, "service": service})
@@ -80,7 +80,7 @@ async def handle_request_message(message: Message, state: FSMContext):
     current_state = await state.get_state()
     if not current_state:
         await message.answer(
-            "Сервис не выбран. Для отправки обращения, необходимо сначала выбрать сервис, воспользовавшись клавиатурой",
+            "Отдел не выбран. Для отправки обращения, необходимо сначала выбрать отдел, воспользовавшись клавиатурой",
             reply_markup=get_main_keyboard(),
         )
         return
@@ -100,9 +100,9 @@ async def handle_request_message(message: Message, state: FSMContext):
 
     text_to_source = (
         "Ваше обращение было отправлено.\n"
-        f"Сервис-получатель: {service.service_name.value}.\n"
+        f"Отдел-получатель: {service.service_name.value}.\n"
         f"Уникальный номер вашего обращения: {request.id}.\n"
-        f"Мы сообщим, ориентировочное время выполнения после ответа представителя сервиса.\n"
+        f"Мы сообщим, ориентировочное время выполнения после ответа представителя отдела.\n"
     )
 
     msg_to_source = await message.answer(
@@ -112,7 +112,7 @@ async def handle_request_message(message: Message, state: FSMContext):
     text_to_common = (
         f"Обращение №{request.id}:\n"
         f'Текст обращения: "{request.text}"\n'
-        f"Сервис-получатель: {service.service_name.value}.\n"
+        f"Отдел-получатель: {service.service_name.value}.\n"
         f"Направлено от: @{message.from_user.username}.\n"
     )
 
@@ -172,7 +172,7 @@ async def handle_query(call: types.CallbackQuery, callback_data: ServiceAnswerCa
     if callback_data.callback == AnswerStatusEnum.DENY.value:
         additional_common_chat_text = (
             f"{STATUS_INFO.format(AnswerStatusEnum.DENIED.value)}\n"
-            f"Представитель сервиса, отклонивший обращение - @{call.from_user.username}."
+            f"Представитель отдела, отклонивший обращение - @{call.from_user.username}."
         )
         additional_source_chat_text = (
             f"{STATUS_INFO.format(AnswerStatusEnum.DENIED.value)}"
@@ -180,7 +180,7 @@ async def handle_query(call: types.CallbackQuery, callback_data: ServiceAnswerCa
         text_to_source = (
             f"Ваше обращение №{request.id} было отклонено.\n"
             f"Убедитесь, что Вы направили обращение в тот чат - используйте команду /help.\n"
-            f"Также вы можете связаться с представителем сервиса напрямую - @{call.from_user.username}."
+            f"Также вы можете связаться с представителем отдела напрямую - @{call.from_user.username}."
         )
     else:
         additional_common_chat_text = (
@@ -190,12 +190,12 @@ async def handle_query(call: types.CallbackQuery, callback_data: ServiceAnswerCa
         )
         additional_source_chat_text = (
             f"{STATUS_INFO.format(AnswerStatusEnum.RESOLVED.value)}\n"
-            f"Представитель сервиса: @{call.from_user.username}."
+            f"Представитель отдела: @{call.from_user.username}."
         )
         text_to_source = (
             f"Ваше обращение №{request.id} было принято в работу.\n"
             f"Ориентировочное время выполения: {callback_data.callback}.\n"
-            f"При необходимости, вы можете связаться с представителем сервиса напрямую: @{call.from_user.username}."
+            f"При необходимости, вы можете связаться с представителем отдела напрямую: @{call.from_user.username}."
         )
 
     await call.bot.edit_message_text(

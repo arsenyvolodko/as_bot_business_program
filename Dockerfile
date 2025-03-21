@@ -14,5 +14,3 @@ COPY . .
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     PYTHONPATH='/app'
-
-CMD ["python3", "atomskills_org_bot/bot/main.py"]
