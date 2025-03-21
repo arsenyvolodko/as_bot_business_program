@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "as-bot-business_program"
+version = "0.1.0"
+description = ""
+authors = ["Volodko Arseny <arvolodko@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+sqlalchemy = "^2.0.29"
+aiogram = "^3.5.0"
+asyncpg = "^0.29.0"
+pydantic = "^2.7.1"
+python-dotenv = "^1.0.1"
+greenlet = "^3.0.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
